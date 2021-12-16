@@ -177,9 +177,9 @@ namespace CsharpInterface
             zedGraphControl1.Invalidate();
 
             GraphPane myPane = zedGraphControl1.GraphPane;
-            myPane.Title.Text = "Đồ thị dữ liệu theo thời gian";
-            myPane.XAxis.Title.Text = "Thời gian (s)";
-            myPane.YAxis.Title.Text = "Dữ liệu";
+            myPane.Title.Text = "Current-Voltage chart for Biomedical Testing";
+            myPane.XAxis.Title.Text = "Potential";
+            myPane.YAxis.Title.Text = "Current";
 
             RollingPointPairList list = new RollingPointPairList(60000);
             LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
@@ -216,8 +216,8 @@ namespace CsharpInterface
 
             // Đặt tên cho hai ô A1. B1 lần lượt là "Thời gian (s)" và "Dữ liệu", sau đó tự động dãn độ rộng
             Microsoft.Office.Interop.Excel.Range rg = (Microsoft.Office.Interop.Excel.Range)ws.get_Range("A1", "B1");
-            ws.Cells[1, 1] = "Thời gian (s)";
-            ws.Cells[1, 2] = "Dữ liệu";
+            ws.Cells[1, 1] = "Potential";
+            ws.Cells[1, 2] = "Current";
             rg.Columns.AutoFit();
 
             // Lưu từ ô đầu tiên của dòng thứ 2, tức ô A2

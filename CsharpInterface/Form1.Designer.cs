@@ -67,19 +67,20 @@ namespace CsharpInterface
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(12, 31);
+            this.comboBox1.Location = new System.Drawing.Point(12, 24);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(120, 24);
             this.comboBox1.TabIndex = 1;
             // 
             // btConnect
             // 
-            this.btConnect.Location = new System.Drawing.Point(244, 2);
+            this.btConnect.Location = new System.Drawing.Point(195, 2);
             this.btConnect.Name = "btConnect";
             this.btConnect.Size = new System.Drawing.Size(120, 46);
             this.btConnect.TabIndex = 2;
             this.btConnect.Text = "Connect";
             this.btConnect.UseVisualStyleBackColor = true;
+            this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
             // 
             // btExit
             // 
@@ -89,24 +90,27 @@ namespace CsharpInterface
             this.btExit.TabIndex = 4;
             this.btExit.Text = "Exit";
             this.btExit.UseVisualStyleBackColor = true;
+            this.btExit.Click += new System.EventHandler(this.btExit_Click);
             // 
             // btSave
             // 
-            this.btSave.Location = new System.Drawing.Point(244, 106);
+            this.btSave.Location = new System.Drawing.Point(195, 106);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(120, 46);
             this.btSave.TabIndex = 5;
             this.btSave.Text = "Save";
             this.btSave.UseVisualStyleBackColor = true;
+            this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
             // btRun
             // 
-            this.btRun.Location = new System.Drawing.Point(244, 54);
+            this.btRun.Location = new System.Drawing.Point(195, 54);
             this.btRun.Name = "btRun";
             this.btRun.Size = new System.Drawing.Size(120, 46);
             this.btRun.TabIndex = 6;
             this.btRun.Text = "Run";
             this.btRun.UseVisualStyleBackColor = true;
+            this.btRun.Click += new System.EventHandler(this.btRun_Click);
             // 
             // btPause
             // 
@@ -116,6 +120,7 @@ namespace CsharpInterface
             this.btPause.TabIndex = 7;
             this.btPause.Text = "Pause";
             this.btPause.UseVisualStyleBackColor = true;
+            this.btPause.Click += new System.EventHandler(this.btPause_Click);
             // 
             // btClear
             // 
@@ -125,6 +130,7 @@ namespace CsharpInterface
             this.btClear.TabIndex = 8;
             this.btClear.Text = "Clear";
             this.btClear.UseVisualStyleBackColor = true;
+            this.btClear.Click += new System.EventHandler(this.btClear_Click);
             // 
             // serialPort1
             // 
@@ -152,19 +158,19 @@ namespace CsharpInterface
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "Time (ms)";
+            this.columnHeader1.Text = "Potential (mV)";
             this.columnHeader1.Width = 163;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Data";
+            this.columnHeader2.Text = "Current (mA)";
             this.columnHeader2.Width = 163;
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 97);
+            this.progressBar1.Location = new System.Drawing.Point(12, 106);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(120, 35);
+            this.progressBar1.Size = new System.Drawing.Size(120, 24);
             this.progressBar1.TabIndex = 10;
             // 
             // Form1
