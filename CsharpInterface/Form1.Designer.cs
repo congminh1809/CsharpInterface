@@ -49,8 +49,7 @@ namespace CsharpInterface
             // 
             // zedGraphControl1
             // 
-            this.zedGraphControl1.Location = new System.Drawing.Point(497, 2);
-            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.zedGraphControl1.Location = new System.Drawing.Point(373, 2);
             this.zedGraphControl1.Name = "zedGraphControl1";
             this.zedGraphControl1.ScrollGrace = 0D;
             this.zedGraphControl1.ScrollMaxX = 0D;
@@ -59,7 +58,7 @@ namespace CsharpInterface
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(1059, 750);
+            this.zedGraphControl1.Size = new System.Drawing.Size(794, 609);
             this.zedGraphControl1.TabIndex = 0;
             this.zedGraphControl1.UseExtendedPrintDialog = true;
             this.zedGraphControl1.Load += new System.EventHandler(this.zedGraphControl1_Load);
@@ -67,16 +66,18 @@ namespace CsharpInterface
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(12, 24);
+            this.comboBox1.Location = new System.Drawing.Point(9, 20);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(120, 24);
+            this.comboBox1.Size = new System.Drawing.Size(91, 21);
             this.comboBox1.TabIndex = 1;
             // 
             // btConnect
             // 
-            this.btConnect.Location = new System.Drawing.Point(195, 2);
+            this.btConnect.Location = new System.Drawing.Point(146, 2);
+            this.btConnect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btConnect.Name = "btConnect";
-            this.btConnect.Size = new System.Drawing.Size(120, 46);
+            this.btConnect.Size = new System.Drawing.Size(90, 37);
             this.btConnect.TabIndex = 2;
             this.btConnect.Text = "Connect";
             this.btConnect.UseVisualStyleBackColor = true;
@@ -84,9 +85,10 @@ namespace CsharpInterface
             // 
             // btExit
             // 
-            this.btExit.Location = new System.Drawing.Point(370, 2);
+            this.btExit.Location = new System.Drawing.Point(278, 2);
+            this.btExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btExit.Name = "btExit";
-            this.btExit.Size = new System.Drawing.Size(120, 46);
+            this.btExit.Size = new System.Drawing.Size(90, 37);
             this.btExit.TabIndex = 4;
             this.btExit.Text = "Exit";
             this.btExit.UseVisualStyleBackColor = true;
@@ -94,9 +96,10 @@ namespace CsharpInterface
             // 
             // btSave
             // 
-            this.btSave.Location = new System.Drawing.Point(195, 106);
+            this.btSave.Location = new System.Drawing.Point(146, 86);
+            this.btSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btSave.Name = "btSave";
-            this.btSave.Size = new System.Drawing.Size(120, 46);
+            this.btSave.Size = new System.Drawing.Size(90, 37);
             this.btSave.TabIndex = 5;
             this.btSave.Text = "Save";
             this.btSave.UseVisualStyleBackColor = true;
@@ -104,9 +107,10 @@ namespace CsharpInterface
             // 
             // btRun
             // 
-            this.btRun.Location = new System.Drawing.Point(195, 54);
+            this.btRun.Location = new System.Drawing.Point(146, 44);
+            this.btRun.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btRun.Name = "btRun";
-            this.btRun.Size = new System.Drawing.Size(120, 46);
+            this.btRun.Size = new System.Drawing.Size(90, 37);
             this.btRun.TabIndex = 6;
             this.btRun.Text = "Run";
             this.btRun.UseVisualStyleBackColor = true;
@@ -114,9 +118,10 @@ namespace CsharpInterface
             // 
             // btPause
             // 
-            this.btPause.Location = new System.Drawing.Point(370, 106);
+            this.btPause.Location = new System.Drawing.Point(278, 86);
+            this.btPause.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btPause.Name = "btPause";
-            this.btPause.Size = new System.Drawing.Size(120, 46);
+            this.btPause.Size = new System.Drawing.Size(90, 37);
             this.btPause.TabIndex = 7;
             this.btPause.Text = "Pause";
             this.btPause.UseVisualStyleBackColor = true;
@@ -124,9 +129,10 @@ namespace CsharpInterface
             // 
             // btClear
             // 
-            this.btClear.Location = new System.Drawing.Point(370, 54);
+            this.btClear.Location = new System.Drawing.Point(278, 44);
+            this.btClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btClear.Name = "btClear";
-            this.btClear.Size = new System.Drawing.Size(120, 46);
+            this.btClear.Size = new System.Drawing.Size(90, 37);
             this.btClear.TabIndex = 8;
             this.btClear.Text = "Clear";
             this.btClear.UseVisualStyleBackColor = true;
@@ -149,35 +155,37 @@ namespace CsharpInterface
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 164);
+            this.listView1.Location = new System.Drawing.Point(9, 133);
+            this.listView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(478, 572);
+            this.listView1.Size = new System.Drawing.Size(360, 466);
             this.listView1.TabIndex = 9;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "Potential (mV)";
+            this.columnHeader1.Text = "Potential / 50 (mV)";
             this.columnHeader1.Width = 163;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Current (mA)";
+            this.columnHeader2.Text = "Current x 500 (mA)";
             this.columnHeader2.Width = 163;
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 106);
+            this.progressBar1.Location = new System.Drawing.Point(9, 86);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(120, 24);
+            this.progressBar1.Size = new System.Drawing.Size(90, 20);
             this.progressBar1.TabIndex = 10;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1557, 748);
+            this.ClientSize = new System.Drawing.Size(1168, 608);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.btClear);
@@ -188,8 +196,9 @@ namespace CsharpInterface
             this.Controls.Add(this.btConnect);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.zedGraphControl1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Research and development of cyclic voltammetry measuring system for biomedical testing";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 

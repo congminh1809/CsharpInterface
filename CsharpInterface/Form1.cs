@@ -41,9 +41,9 @@ namespace CsharpInterface
 
             // Khởi tạo ZedGraph
             GraphPane myPane = zedGraphControl1.GraphPane;
-            myPane.Title.Text = "Đồ thị dữ liệu theo thời gian";
-            myPane.XAxis.Title.Text = "Thời gian (s)";
-            myPane.YAxis.Title.Text = "Dữ liệu";
+            myPane.Title.Text = "Cyclic - Voltammetry Graph";
+            myPane.XAxis.Title.Text = "Potential / 50 (mV)";
+            myPane.YAxis.Title.Text = "Current x 500 (mA)";
 
             RollingPointPairList list = new RollingPointPairList(60000);
             LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
@@ -62,6 +62,7 @@ namespace CsharpInterface
         private
             void timer1_Tick(object sender, EventArgs e)
         {
+            
             if (!serialPort1.IsOpen)
             {
                 progressBar1.Value = 0;
@@ -72,6 +73,7 @@ namespace CsharpInterface
                 Draw();
                 Data_Listview();
                 status = 0;
+
             }
         }
 
@@ -95,7 +97,8 @@ namespace CsharpInterface
 
                 double.TryParse(SDatas, out datas); // Chuyển đổi sang kiểu double
                 double.TryParse(SRealTime, out realtime);
-                realtime = realtime / 1000.0; // Đối ms sang s
+                realtime = realtime / 50; // Đối ms sang s
+                datas = datas * 500;
                 status = 1; // Bắt sự kiện xử lý xong chuỗi, đổi starus về 1 để hiển thị dữ liệu trong ListView và vẽ đồ thị
             }
             catch
@@ -178,8 +181,8 @@ namespace CsharpInterface
 
             GraphPane myPane = zedGraphControl1.GraphPane;
             myPane.Title.Text = "Current-Voltage chart for Biomedical Testing";
-            myPane.XAxis.Title.Text = "Potential";
-            myPane.YAxis.Title.Text = "Current";
+            myPane.XAxis.Title.Text = "Potential / 50 (mV)";
+            myPane.YAxis.Title.Text = "Current x 500 (mA)";
 
             RollingPointPairList list = new RollingPointPairList(60000);
             LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
