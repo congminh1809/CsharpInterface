@@ -42,18 +42,18 @@ namespace CsharpInterface
             // Khởi tạo ZedGraph
             GraphPane myPane = zedGraphControl1.GraphPane;
             myPane.Title.Text = "Cyclic - Voltammetry Graph";
-            myPane.XAxis.Title.Text = "Potential / 50 (mV)";
-            myPane.YAxis.Title.Text = "Current x 500 (mA)";
+            myPane.XAxis.Title.Text = "Potential (mV)";
+            myPane.YAxis.Title.Text = "Current (mA)";
 
             RollingPointPairList list = new RollingPointPairList(60000);
             LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
 
-            myPane.XAxis.Scale.Min = 0;
-            myPane.XAxis.Scale.Max = 30;
+            myPane.XAxis.Scale.Min = -10;
+            myPane.XAxis.Scale.Max = 10;
             myPane.XAxis.Scale.MinorStep = 1;
             myPane.XAxis.Scale.MajorStep = 5;
-            myPane.YAxis.Scale.Min = -100;
-            myPane.YAxis.Scale.Max = 100;
+            myPane.YAxis.Scale.Min = -20;
+            myPane.YAxis.Scale.Max = 20;
 
             myPane.AxisChange();
         }
@@ -62,10 +62,10 @@ namespace CsharpInterface
         private
             void timer1_Tick(object sender, EventArgs e)
         {
-            
             if (!serialPort1.IsOpen)
             {
                 progressBar1.Value = 0;
+                //ClearZedGraph();
             }
             else if (serialPort1.IsOpen)
             {
@@ -76,9 +76,8 @@ namespace CsharpInterface
 
             }
         }
-
-        // Hàm này lưu lại cổng COM đã chọn cho lần kết nối
-        private
+            // Hàm này lưu lại cổng COM đã chọn cho lần kết nối
+            private
             void SaveSetting()
         {
             Properties.Settings.Default.ComName = comboBox1.Text;
@@ -97,8 +96,8 @@ namespace CsharpInterface
 
                 double.TryParse(SDatas, out datas); // Chuyển đổi sang kiểu double
                 double.TryParse(SRealTime, out realtime);
-                realtime = realtime / 50; // Đối ms sang s
-                datas = datas * 500;
+                realtime = realtime / 100; // Đối ms sang s
+                //datas = datas ;
                 status = 1; // Bắt sự kiện xử lý xong chuỗi, đổi starus về 1 để hiển thị dữ liệu trong ListView và vẽ đồ thị
             }
             catch
@@ -167,6 +166,12 @@ namespace CsharpInterface
             zedGraphControl1.AxisChange();
             zedGraphControl1.Invalidate();
             zedGraphControl1.Refresh();
+
+            //ZedGraph.GraphPane myPane = zedGraphControl1.GraphPane;
+            //myPane.XAxis.Scale.Min = 0.0;
+            //zedGraphControl1.AxisChange();
+            //zedGraphControl1.RestoreScale(myPane);
+            //zedGraphControl1.ZoomOut(pane);
         }
 
         // Xóa đồ thị, với ZedGraph thì phải khai báo lại như ở hàm Form1_Load, nếu không sẽ không hiển thị
@@ -181,18 +186,18 @@ namespace CsharpInterface
 
             GraphPane myPane = zedGraphControl1.GraphPane;
             myPane.Title.Text = "Current-Voltage chart for Biomedical Testing";
-            myPane.XAxis.Title.Text = "Potential / 50 (mV)";
-            myPane.YAxis.Title.Text = "Current x 500 (mA)";
+            myPane.XAxis.Title.Text = "Potential (mV)";
+            myPane.YAxis.Title.Text = "Current (mA)";
 
             RollingPointPairList list = new RollingPointPairList(60000);
             LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
 
-            myPane.XAxis.Scale.Min = 0;
-            myPane.XAxis.Scale.Max = 30;
+            myPane.XAxis.Scale.Min = -10;
+            myPane.XAxis.Scale.Max = 10;
             myPane.XAxis.Scale.MinorStep = 1;
             myPane.XAxis.Scale.MajorStep = 5;
-            myPane.YAxis.Scale.Min = -100;
-            myPane.YAxis.Scale.Max = 100;
+            myPane.YAxis.Scale.Min = -20;
+            myPane.YAxis.Scale.Max = 20;
 
             zedGraphControl1.AxisChange();
         }
@@ -256,6 +261,8 @@ namespace CsharpInterface
             {
                 serialPort1.PortName = comboBox1.Text; // Lấy cổng COM
                 serialPort1.BaudRate = 9600; // Baudrate là 9600, trùng với baudrate của Arduino
+                //serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
+                //serialPort1.Write("1"); //Gửi ký tự "2" qua Serial, tương ứng với state = 1
                 try
                 {
                     serialPort1.Open();
@@ -293,9 +300,9 @@ namespace CsharpInterface
             }
         }
 
-        // Sự kiện nhấn nút btRun
+        // Sự kiện nhấn nút btCheck
         private
-            void btRun_Click(object sender, EventArgs e)
+            void btCheck_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
@@ -303,6 +310,8 @@ namespace CsharpInterface
             }
             else
                 MessageBox.Show("Bạn không thể chạy khi chưa kết nối với thiết bị", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
         }
 
         // Sự kiện nhấn nút btPause
@@ -345,5 +354,17 @@ namespace CsharpInterface
             else
                 MessageBox.Show("Bạn không thể xóa khi chưa kết nối với thiết bị", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        // Sự kiện nhấn nút Run
+        private
+            void btRun_Click(object sender, EventArgs e)
+        {
+            listView1.Items.Clear(); // Xóa listview
+            ClearZedGraph();
+            //ResetValue();
+            Draw();
+            
+        }       
+                   
     }
 }
