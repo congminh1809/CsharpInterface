@@ -207,7 +207,7 @@ namespace CsharpInterface
             void ResetValue()
         {
             realtime = 0;
-            datas = 0;
+            datas = 0; 
             SDatas = String.Empty;
             SRealTime = String.Empty;
             status = 0; // Chuyển status về 0
