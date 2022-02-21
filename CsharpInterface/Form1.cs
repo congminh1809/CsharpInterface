@@ -31,13 +31,17 @@ namespace CsharpInterface
             Form1()
         {
             InitializeComponent();
+
+            string[] BR = { "4800", "9600", "230400" };
+            //comboBR.Items.addRange(BR);
         }
 
         private
             void Form1_Load(object sender, EventArgs e)
         {
-            comboBox1.DataSource = SerialPort.GetPortNames(); // Lấy nguồn cho comboBox là tên của cổng COM
-            comboBox1.Text = Properties.Settings.Default.ComName; // Lấy ComName đã làm ở bước 5 cho comboBox
+            comboBoxName.DataSource = SerialPort.GetPortNames(); // Lấy nguồn cho comboBox là tên của cổng COM
+            comboBoxName.Text = Properties.Settings.Default.ComName; // Lấy ComName đã làm ở bước 5 cho comboBox
+            
 
             // Khởi tạo ZedGraph
             GraphPane myPane = zedGraphControl1.GraphPane;
@@ -76,11 +80,11 @@ namespace CsharpInterface
 
             }
         }
-            // Hàm này lưu lại cổng COM đã chọn cho lần kết nối
-            private
-            void SaveSetting()
+        // Hàm này lưu lại cổng COM đã chọn cho lần kết nối
+        private
+        void SaveSetting()
         {
-            Properties.Settings.Default.ComName = comboBox1.Text;
+            Properties.Settings.Default.ComName = comboBoxName.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -96,7 +100,7 @@ namespace CsharpInterface
 
                 double.TryParse(SDatas, out datas); // Chuyển đổi sang kiểu double
                 double.TryParse(SRealTime, out realtime);
-                realtime = realtime / 100; // Đối ms sang s
+                //realtime = realtime/100; // Đối ms sang s
                 //datas = datas ;
                 status = 1; // Bắt sự kiện xử lý xong chuỗi, đổi starus về 1 để hiển thị dữ liệu trong ListView và vẽ đồ thị
             }
@@ -207,7 +211,7 @@ namespace CsharpInterface
             void ResetValue()
         {
             realtime = 0;
-            datas = 0; 
+            datas = 0;
             SDatas = String.Empty;
             SRealTime = String.Empty;
             status = 0; // Chuyển status về 0
@@ -249,9 +253,13 @@ namespace CsharpInterface
         private
             void btConnect_Click(object sender, EventArgs e)
         {
+            string str = txt_SVol.Text + '|' + txt_EVol.Text + '_' + txt_Step.Text + '?' + txt_Freq.Text;
+
+
             if (serialPort1.IsOpen)
             {
-                serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
+                //serialPort1.Write("0"); //Gửi ký tự "0" qua Serial, tương ứng với state = 0
+                serialPort1.WriteLine(str);
                 serialPort1.Close();
                 btConnect.Text = "Kết nối";
                 btExit.Enabled = true;
@@ -259,14 +267,18 @@ namespace CsharpInterface
             }
             else
             {
-                serialPort1.PortName = comboBox1.Text; // Lấy cổng COM
-                serialPort1.BaudRate = 9600; // Baudrate là 9600, trùng với baudrate của Arduino
+                serialPort1.PortName = comboBoxName.Text; // Lấy cổng COM
+                //string[] BR = { "4800", "9600", "230400" };
+                serialPort1.BaudRate = Convert.ToInt32(comboBR.Text); // Baudrate là 9600, trùng với baudrate của Arduino
+                //serialPort1.BaudRate = 9600;
                 //serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
                 //serialPort1.Write("1"); //Gửi ký tự "2" qua Serial, tương ứng với state = 1
                 try
                 {
+                    
                     serialPort1.Open();
-                    btConnect.Text = "Ngắt kết nối";
+                    serialPort1.WriteLine(str);
+                    btConnect.Text = "Disconnect";
                     btExit.Enabled = false;
                 }
                 catch
@@ -359,12 +371,64 @@ namespace CsharpInterface
         private
             void btRun_Click(object sender, EventArgs e)
         {
+            if (serialPort1.IsOpen)
+            {
+                serialPort1.Write("1"); //Gửi ký tự "1" qua Serial, chạy hàm tạo Random ở Arduino
+            }
             listView1.Items.Clear(); // Xóa listview
             ClearZedGraph();
             //ResetValue();
             Draw();
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
             
-        }       
-                   
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_SVol_TextChanged(object sender, EventArgs e)
+        {
+            //if (serialPort1.IsOpen)
+            //{
+            //    serialPort1.Write(txt_SVol.Text);
+            //}
+        }
+
+        private void txt_EVol_TextChanged(object sender, EventArgs e)
+        {
+            //if (serialPort1.IsOpen)
+            //{
+            //    serialPort1.Write("|");
+            //    serialPort1.WriteLine(txt_EVol.Text);
+                
+            //}
+        }
+
+        private void progressBar1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_Step_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_Freq_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
