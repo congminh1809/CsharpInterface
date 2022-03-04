@@ -27,21 +27,26 @@ namespace CsharpInterface
         double realtime = 0; //Khai báo biến thời gian để vẽ đồ thị
         double datas = 0; //Khai báo biến dữ liệu cảm biến để vẽ đồ thị
 
+        int numberSample = 1000;
+
+        double[] bufferC = new double[1600];
+        double[] bufferV = new double[1600];
+        string[] bufferCStr = new string[1600];
+        string[] bufferVStr = new string[1600];
+        int recieverCount = 0;
+
+
         public
             Form1()
         {
             InitializeComponent();
-
-            string[] BR = { "4800", "9600", "230400" };
-            //comboBR.Items.addRange(BR);
         }
 
         private
             void Form1_Load(object sender, EventArgs e)
         {
-            comboBoxName.DataSource = SerialPort.GetPortNames(); // Lấy nguồn cho comboBox là tên của cổng COM
-            comboBoxName.Text = Properties.Settings.Default.ComName; // Lấy ComName đã làm ở bước 5 cho comboBox
-            
+            comboBox1.DataSource = SerialPort.GetPortNames(); // Lấy nguồn cho comboBox là tên của cổng COM
+            comboBox1.Text = Properties.Settings.Default.ComName; // Lấy ComName đã làm ở bước 5 cho comboBox
 
             // Khởi tạo ZedGraph
             GraphPane myPane = zedGraphControl1.GraphPane;
@@ -74,8 +79,23 @@ namespace CsharpInterface
             else if (serialPort1.IsOpen)
             {
                 progressBar1.Value = 100;
-                Draw();
-                Data_Listview();
+
+                progressBarMeasure.Value = (recieverCount + 1) / 10;
+                if (progressBarMeasure.Value > 100)
+                {
+                    progressBarMeasure.Value = 100;
+                }
+
+                if (recieverCount == numberSample)
+                {
+                    //recieverCount = 0;
+                    //progressBarMeasure.Value = 0;
+
+                    serialPort1.Close();
+                    Data_Listview();
+                }
+                //Draw();
+                //Data_Listview();
                 status = 0;
 
             }
@@ -84,7 +104,7 @@ namespace CsharpInterface
         private
         void SaveSetting()
         {
-            Properties.Settings.Default.ComName = comboBoxName.Text;
+            Properties.Settings.Default.ComName = comboBox1.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -95,12 +115,25 @@ namespace CsharpInterface
             try
             {
                 string[] arrList = serialPort1.ReadLine().Split('|'); // Đọc một dòng của Serial, cắt chuỗi khi gặp ký tự gạch đứng
-                SRealTime = arrList[0]; // Chuỗi đầu tiên lưu vào SRealTime
-                SDatas = arrList[1]; // Chuỗi thứ hai lưu vào SDatas
+                //SRealTime = arrList[0]; // Chuỗi đầu tiên lưu vào SRealTime
+                //SDatas = arrList[1]; // Chuỗi thứ hai lưu vào SDatas
 
-                double.TryParse(SDatas, out datas); // Chuyển đổi sang kiểu double
-                double.TryParse(SRealTime, out realtime);
-                //realtime = realtime/100; // Đối ms sang s
+                //double.TryParse(SDatas, out datas); // Chuyển đổi sang kiểu double
+                //double.TryParse(SRealTime, out realtime);
+
+                bufferVStr[recieverCount] = arrList[0];
+                bufferCStr[recieverCount] = arrList[1];
+                recieverCount++;
+
+                //progressBarMeasure.Value = (recieverCount + 1) / 10;
+
+                //if (recieverCount == 999)
+                //{
+                //    //recieverCount = 0;
+                //    Data_Listview();
+                //}
+
+                //realtime = realtime / 100; // Đối ms sang s
                 //datas = datas ;
                 status = 1; // Bắt sự kiện xử lý xong chuỗi, đổi starus về 1 để hiển thị dữ liệu trong ListView và vẽ đồ thị
             }
@@ -118,14 +151,63 @@ namespace CsharpInterface
                 return;
             else
             {
-                ListViewItem item = new ListViewItem(realtime.ToString()); // Gán biến realtime vào cột đầu tiên của ListView
-                item.SubItems.Add(datas.ToString());
-                listView1.Items.Add(item); // Gán biến datas vào cột tiếp theo của ListView
-                                           // Không nên gán string SDatas vì khi xuất dữ liệu sang Excel sẽ là dạng string, không thực hiện các phép toán được
+                for (int i = 0; i < recieverCount; i++)
+                {
+                    double.TryParse(bufferVStr[i], out bufferV[i]); // Chuyển đổi sang kiểu double
+                    double.TryParse(bufferCStr[i], out bufferC[i]);
+                    //SmoothingData(bufferC);
+                    //ListViewItem item = new ListViewItem(bufferV[i].ToString()); // Gán biến realtime vào cột đầu tiên của ListView
+                    //item.SubItems.Add(bufferC[i].ToString());
+                    ListViewItem item = new ListViewItem(bufferVStr[i].ToString()); // Gán biến realtime vào cột đầu tiên của ListView
+                    item.SubItems.Add(bufferCStr[i].ToString());
+                    listView1.Items.Add(item); // Gán biến datas vào cột tiếp theo của ListView
+                                               // Không nên gán string SDatas vì khi xuất dữ liệu sang Excel sẽ là dạng string, không thực hiện các phép toán được
 
-                listView1.Items[listView1.Items.Count - 1].EnsureVisible(); // Hiện thị dòng được gán gần nhất ở ListView, tức là mình cuộn ListView theo dữ liệu gần nhất đó
+                    listView1.Items[listView1.Items.Count - 1].EnsureVisible(); // Hiện thị dòng được gán gần nhất ở ListView, tức là mình cuộn ListView
+                }
+                //SmoothingData(bufferC);
+                Draw();
             }
         }
+
+        // Hàm làm mịn dữ liệu
+        private
+            void SmoothingData(double[] a)
+        {
+            double[] b = a;
+
+            int frame;
+            //int num = 1;
+            double sum = 0;
+            //int countFrame = 1;
+            frame = 50;
+            //n = 802;
+            //n = (Convert.ToInt32(txt_EVol) - Convert.ToInt32(txt_SVol)) / Convert.ToInt32(txt_Step) + 1;
+
+            //while (countFrame < frame)
+            //{
+
+            //    sum += a[countFrame - 1];
+            //    a[countFrame - 1] = sum / countFrame;
+            //    countFrame++;
+            //    //num = num + 1;
+            //}
+
+            for (int i = (numberSample / 50 * 36) + 5; i < numberSample / 50 * 38; i++)
+            {
+                sum = 0;
+                for (int j = i + 2 - frame; j <= i; j++)
+                {
+                    sum += b[j];
+                }
+                a[i] = sum / frame;
+                sum = 0;
+                //i++;
+            }
+
+
+        }
+
 
         // Vẽ đồ thị
         private
@@ -145,7 +227,22 @@ namespace CsharpInterface
             if (list == null)
                 return;
 
-            list.Add(realtime, datas); // Thêm điểm trên đồ thị
+            //list.Add(realtime, datas); // Thêm điểm trên đồ thị
+            for (int i = 0; i < recieverCount; i++)
+            {
+                if (i <= (numberSample / 2) - 1)
+                {
+                    list.Add(bufferV[i], bufferC[i]);
+                }
+                else
+                {
+                    bufferV[i] = numberSample - bufferV[i];
+                    list.Add(bufferV[i], bufferC[i]);
+                }
+                //double.TryParse(bufferVStr[i], out bufferV[i]); // Chuyển đổi sang kiểu double
+                //double.TryParse(bufferCStr[i], out bufferC[i]);
+                //list.Add(bufferV[i], bufferC[i]);
+            }
 
             Scale xScale = zedGraphControl1.GraphPane.XAxis.Scale;
             Scale yScale = zedGraphControl1.GraphPane.YAxis.Scale;
@@ -197,11 +294,11 @@ namespace CsharpInterface
             LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
 
             myPane.XAxis.Scale.Min = -10;
-            myPane.XAxis.Scale.Max = 10;
+            myPane.XAxis.Scale.Max = 550;
             myPane.XAxis.Scale.MinorStep = 1;
             myPane.XAxis.Scale.MajorStep = 5;
-            myPane.YAxis.Scale.Min = -20;
-            myPane.YAxis.Scale.Max = 20;
+            myPane.YAxis.Scale.Min = -120;
+            myPane.YAxis.Scale.Max = 120;
 
             zedGraphControl1.AxisChange();
         }
@@ -253,13 +350,9 @@ namespace CsharpInterface
         private
             void btConnect_Click(object sender, EventArgs e)
         {
-            string str = txt_SVol.Text + '|' + txt_EVol.Text + '_' + txt_Step.Text + '?' + txt_Freq.Text;
-
-
             if (serialPort1.IsOpen)
             {
-                //serialPort1.Write("0"); //Gửi ký tự "0" qua Serial, tương ứng với state = 0
-                serialPort1.WriteLine(str);
+                serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
                 serialPort1.Close();
                 btConnect.Text = "Kết nối";
                 btExit.Enabled = true;
@@ -267,18 +360,15 @@ namespace CsharpInterface
             }
             else
             {
-                serialPort1.PortName = comboBoxName.Text; // Lấy cổng COM
-                //string[] BR = { "4800", "9600", "230400" };
-                serialPort1.BaudRate = Convert.ToInt32(comboBR.Text); // Baudrate là 9600, trùng với baudrate của Arduino
-                //serialPort1.BaudRate = 9600;
+                serialPort1.PortName = comboBox1.Text; // Lấy cổng COM
+                serialPort1.BaudRate = 9600; // Baudrate là 9600, trùng với baudrate của Arduino
                 //serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
                 //serialPort1.Write("1"); //Gửi ký tự "2" qua Serial, tương ứng với state = 1
                 try
                 {
-                    
                     serialPort1.Open();
-                    serialPort1.WriteLine(str);
-                    btConnect.Text = "Disconnect";
+                    btConnect.Text = "Ngắt kết nối";
+                    progressBar1.Value = 100;
                     btExit.Enabled = false;
                 }
                 catch
@@ -371,64 +461,14 @@ namespace CsharpInterface
         private
             void btRun_Click(object sender, EventArgs e)
         {
-            if (serialPort1.IsOpen)
-            {
-                serialPort1.Write("1"); //Gửi ký tự "1" qua Serial, chạy hàm tạo Random ở Arduino
-            }
             listView1.Items.Clear(); // Xóa listview
             ClearZedGraph();
             //ResetValue();
-            Draw();
+            //Draw();
+            //Draw();
+            //Data_Listview();
 
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txt_SVol_TextChanged(object sender, EventArgs e)
-        {
-            //if (serialPort1.IsOpen)
-            //{
-            //    serialPort1.Write(txt_SVol.Text);
-            //}
-        }
-
-        private void txt_EVol_TextChanged(object sender, EventArgs e)
-        {
-            //if (serialPort1.IsOpen)
-            //{
-            //    serialPort1.Write("|");
-            //    serialPort1.WriteLine(txt_EVol.Text);
-                
-            //}
-        }
-
-        private void progressBar1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txt_Step_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txt_Freq_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
