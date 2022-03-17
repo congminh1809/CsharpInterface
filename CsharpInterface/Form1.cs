@@ -27,14 +27,14 @@ namespace CsharpInterface
         double realtime = 0; //Khai báo biến thời gian để vẽ đồ thị
         double datas = 0; //Khai báo biến dữ liệu cảm biến để vẽ đồ thị
 
-        int repeatCount = 1;
+        int repeatCount = 3;
         int numberSample = 1000;
 
-        double[] bufferC = new double[1600];
-        double[] bufferV = new double[1600];
+        double[] bufferC = new double[16000];
+        double[] bufferV = new double[16000];
         double[] tempC = new double[16000];
-        string[] bufferCStr = new string[1600];
-        string[] bufferVStr = new string[1600];
+        string[] bufferCStr = new string[16000];
+        string[] bufferVStr = new string[16000];
         int recieverCount = 0;
 
 
@@ -82,7 +82,7 @@ namespace CsharpInterface
             {
                 progressBar1.Value = 100;
 
-                progressBarMeasure.Value = (recieverCount + 1) / (numberSample / 100);
+                progressBarMeasure.Value = (recieverCount) / ((numberSample + 50) / 100);
                 if (progressBarMeasure.Value > 100)
                 {
                     progressBarMeasure.Value = 100;
@@ -256,16 +256,19 @@ namespace CsharpInterface
                 return;
 
             //list.Add(realtime, datas); // Thêm điểm trên đồ thị
-            for (int i = 0; i < numberSample; i++)
-            //for (int i = numberSample / repeatCount * (repeatCount - 2); i < numberSample / repeatCount * (repeatCount - 1); i++)
+            //for (int i = 0; i < numberSample; i++)
+            int temp1 = (numberSample / repeatCount * (repeatCount - 2)) + (numberSample / (2 * repeatCount)) - 1;
+            //int temp2 = (numberSample / repeatCount * (repeatCount - 1)) + (numberSample / (2 * repeatCount)) - 1;
+            for (int i = numberSample / repeatCount * (repeatCount - 2); i < numberSample / repeatCount * (repeatCount - 1); i++)
             {
-                if (i <= (numberSample / 2) - 1)
+                if (i <= temp1)
                 {
+                    bufferV[i] = bufferV[i] - (numberSample / repeatCount * (repeatCount - 2));
                     list.Add(bufferV[i], bufferC[i]);
                 }
-                else
+                if (i > temp1) 
                 {
-                    bufferV[i] = numberSample - bufferV[i];
+                    bufferV[i] = (numberSample / repeatCount * (repeatCount - 1)) - bufferV[i];
                     list.Add(bufferV[i], bufferC[i]);
                 }
                 //double.TryParse(bufferVStr[i], out bufferV[i]); // Chuyển đổi sang kiểu double
@@ -317,10 +320,10 @@ namespace CsharpInterface
             GraphPane myPane = zedGraphControl1.GraphPane;
             myPane.Title.Text = "Current-Voltage chart for Biomedical Testing";
             myPane.XAxis.Title.Text = "Potential (mV)";
-            myPane.YAxis.Title.Text = "Current (mA)";
+            myPane.YAxis.Title.Text = "Current (µA)";
 
             RollingPointPairList list = new RollingPointPairList(60000);
-            LineItem curve = myPane.AddCurve("Dữ liệu", list, Color.Red, SymbolType.None);
+            LineItem curve = myPane.AddCurve("Data", list, Color.Red, SymbolType.None);
 
             myPane.XAxis.Scale.Min = -10;
             myPane.XAxis.Scale.Max = 550;

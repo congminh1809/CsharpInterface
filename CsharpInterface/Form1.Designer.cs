@@ -52,7 +52,7 @@ namespace CsharpInterface
             // zedGraphControl1
             // 
             this.zedGraphControl1.Location = new System.Drawing.Point(499, 2);
-            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(5);
             this.zedGraphControl1.Name = "zedGraphControl1";
             this.zedGraphControl1.ScrollGrace = 0D;
             this.zedGraphControl1.ScrollMaxX = 0D;
@@ -61,7 +61,7 @@ namespace CsharpInterface
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(1421, 1042);
+            this.zedGraphControl1.Size = new System.Drawing.Size(1550, 1030);
             this.zedGraphControl1.TabIndex = 0;
             this.zedGraphControl1.UseExtendedPrintDialog = true;
             this.zedGraphControl1.Load += new System.EventHandler(this.zedGraphControl1_Load);
@@ -160,10 +160,10 @@ namespace CsharpInterface
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(3, 185);
+            this.listView1.Location = new System.Drawing.Point(12, 185);
             this.listView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(488, 859);
+            this.listView1.Size = new System.Drawing.Size(479, 847);
             this.listView1.TabIndex = 9;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
