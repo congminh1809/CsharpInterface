@@ -27,10 +27,12 @@ namespace CsharpInterface
         double realtime = 0; //Khai báo biến thời gian để vẽ đồ thị
         double datas = 0; //Khai báo biến dữ liệu cảm biến để vẽ đồ thị
 
+        int repeatCount = 1;
         int numberSample = 1000;
 
         double[] bufferC = new double[1600];
         double[] bufferV = new double[1600];
+        double[] tempC = new double[16000];
         string[] bufferCStr = new string[1600];
         string[] bufferVStr = new string[1600];
         int recieverCount = 0;
@@ -80,7 +82,7 @@ namespace CsharpInterface
             {
                 progressBar1.Value = 100;
 
-                progressBarMeasure.Value = (recieverCount + 1) / 10;
+                progressBarMeasure.Value = (recieverCount + 1) / (numberSample / 100);
                 if (progressBarMeasure.Value > 100)
                 {
                     progressBarMeasure.Value = 100;
@@ -92,7 +94,12 @@ namespace CsharpInterface
                     //progressBarMeasure.Value = 0;
 
                     serialPort1.Close();
+                    //SmoothingData(bufferC);
                     Data_Listview();
+                    ClearZedGraph();
+                    Draw();
+
+
                 }
                 //Draw();
                 //Data_Listview();
@@ -155,6 +162,7 @@ namespace CsharpInterface
                 {
                     double.TryParse(bufferVStr[i], out bufferV[i]); // Chuyển đổi sang kiểu double
                     double.TryParse(bufferCStr[i], out bufferC[i]);
+                    tempC[i] = bufferC[i];
                     //SmoothingData(bufferC);
                     //ListViewItem item = new ListViewItem(bufferV[i].ToString()); // Gán biến realtime vào cột đầu tiên của ListView
                     //item.SubItems.Add(bufferC[i].ToString());
@@ -165,8 +173,8 @@ namespace CsharpInterface
 
                     listView1.Items[listView1.Items.Count - 1].EnsureVisible(); // Hiện thị dòng được gán gần nhất ở ListView, tức là mình cuộn ListView
                 }
-                //SmoothingData(bufferC);
-                Draw();
+                SmoothingData(bufferC);
+                //Draw();
             }
         }
 
@@ -174,35 +182,55 @@ namespace CsharpInterface
         private
             void SmoothingData(double[] a)
         {
-            double[] b = a;
 
             int frame;
             //int num = 1;
             double sum = 0;
             //int countFrame = 1;
-            frame = 50;
+            frame = 29;
             //n = 802;
             //n = (Convert.ToInt32(txt_EVol) - Convert.ToInt32(txt_SVol)) / Convert.ToInt32(txt_Step) + 1;
 
-            //while (countFrame < frame)
-            //{
-
-            //    sum += a[countFrame - 1];
-            //    a[countFrame - 1] = sum / countFrame;
-            //    countFrame++;
-            //    //num = num + 1;
-            //}
-
-            for (int i = (numberSample / 50 * 36) + 5; i < numberSample / 50 * 38; i++)
+            for (int i = 0; i < numberSample; i++)
             {
+                //a[i]=(a[i-Buffer/2] + … + a[i] + … + a[i+Buffer/2]) / Buffer
                 sum = 0;
-                for (int j = i + 2 - frame; j <= i; j++)
+                if (i < frame / 2)
                 {
-                    sum += b[j];
+                    //sum = 0;
+                    for (int j = 0; j <= i + frame/2; j++)
+                    {
+                        sum += tempC[j];
+                    }
+                    a[i] = sum / (i + frame/2 + 1);
+                    //sum = 0;
+
                 }
-                a[i] = sum / frame;
-                sum = 0;
-                //i++;
+
+                if (i >= frame / 2 && i < numberSample - frame / 2)
+                {
+                    //sum = 0;
+                    //for (int j = i - frame / 2; j <= i + frame / 2; j++)
+                    for (int j = (i - (frame / 2)); j < (i - (frame / 2) + frame); j++)
+                    {
+                        sum += tempC[j];
+                    }
+                    a[i] = sum / frame;
+                    //sum = 0;
+                }
+
+                if (i >= numberSample - (frame / 2))
+                {
+                    //sum = 0;
+                    for (int j = i - frame / 2; j < numberSample; j++)
+                    {
+                        sum += tempC[j];
+                    }
+                    a[i] = sum / ((numberSample - 1 - i) + frame / 2 + 1);
+                    //sum = 0;
+
+                }
+
             }
 
 
@@ -228,7 +256,8 @@ namespace CsharpInterface
                 return;
 
             //list.Add(realtime, datas); // Thêm điểm trên đồ thị
-            for (int i = 0; i < recieverCount; i++)
+            for (int i = 0; i < numberSample; i++)
+            //for (int i = numberSample / repeatCount * (repeatCount - 2); i < numberSample / repeatCount * (repeatCount - 1); i++)
             {
                 if (i <= (numberSample / 2) - 1)
                 {
@@ -300,6 +329,19 @@ namespace CsharpInterface
             myPane.YAxis.Scale.Min = -120;
             myPane.YAxis.Scale.Max = 120;
 
+            //myPane.XAxis.Scale.Min = Convert.ToInt32(txt_SVol.Text) - 150;
+            //myPane.XAxis.Scale.Max = Convert.ToInt32(txt_EVol.Text) + 150;
+            myPane.XAxis.Scale.MinorStep = 1;
+            myPane.XAxis.Scale.MajorStep = 5;
+            //myPane.YAxis.Scale.Min = -20;
+            //myPane.YAxis.Scale.Max = 50;
+            //graphHeightMax = Convert.ToInt32(bufferC.Max());
+            //graphHeightMin = Convert.ToInt32(bufferC.Min());
+            myPane.XAxis.Scale.Min = 0 - 50;
+            myPane.XAxis.Scale.Max = 500 + 50;
+            myPane.YAxis.Scale.Min = Convert.ToInt32(bufferC.Min()) - 5;
+            myPane.YAxis.Scale.Max = Convert.ToInt32(bufferC.Max()) + 5;
+
             zedGraphControl1.AxisChange();
         }
 
@@ -327,22 +369,33 @@ namespace CsharpInterface
             Microsoft.Office.Interop.Excel.Range rg = (Microsoft.Office.Interop.Excel.Range)ws.get_Range("A1", "B1");
             ws.Cells[1, 1] = "Potential";
             ws.Cells[1, 2] = "Current";
+            ws.Cells[1, 3] = "Smooth";
             rg.Columns.AutoFit();
 
             // Lưu từ ô đầu tiên của dòng thứ 2, tức ô A2
             int i = 2;
             int j = 1;
+            int smooth = 0;
+
+            ////Làm mịn dữ liệu
+            //SmoothingData(dataToSmooth);
 
             foreach (ListViewItem comp in listView1.Items)
             {
-                ws.Cells[i, j] = comp.Text.ToString();
+                //ws.Cells[i, j] = comp.Text.ToString();
+                ws.Cells[i, j] = Convert.ToDouble(comp.Text);
                 foreach (ListViewItem.ListViewSubItem drv in comp.SubItems)
                 {
-                    ws.Cells[i, j] = drv.Text.ToString();
+                    //ws.Cells[i, j] = drv.Text.ToString();
+                    ws.Cells[i, j] = Convert.ToDouble(drv.Text);
                     j++;
                 }
                 j = 1;
                 i++;
+
+                ws.Cells[smooth + 2, 3] = Convert.ToDouble(bufferC[smooth]);
+                smooth++;
+                ws.Cells[1, 3] = "Smooth";
             }
         }
 
@@ -362,6 +415,7 @@ namespace CsharpInterface
             {
                 serialPort1.PortName = comboBox1.Text; // Lấy cổng COM
                 serialPort1.BaudRate = 9600; // Baudrate là 9600, trùng với baudrate của Arduino
+                numberSample = numberSample * repeatCount;
                 //serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
                 //serialPort1.Write("1"); //Gửi ký tự "2" qua Serial, tương ứng với state = 1
                 try
