@@ -94,8 +94,9 @@ namespace CsharpInterface
                     //progressBarMeasure.Value = 0;
 
                     serialPort1.Close();
-                    //SmoothingData(bufferC);
                     Data_Listview();
+                    SmoothingData(bufferC);
+                    //Data_Listview();
                     ClearZedGraph();
                     Draw();
 
@@ -173,7 +174,7 @@ namespace CsharpInterface
 
                     listView1.Items[listView1.Items.Count - 1].EnsureVisible(); // Hiện thị dòng được gán gần nhất ở ListView, tức là mình cuộn ListView
                 }
-                SmoothingData(bufferC);
+                //SmoothingData(bufferC);
                 //Draw();
             }
         }
@@ -187,7 +188,7 @@ namespace CsharpInterface
             //int num = 1;
             double sum = 0;
             //int countFrame = 1;
-            frame = 29;
+            frame = 35;
             //n = 802;
             //n = (Convert.ToInt32(txt_EVol) - Convert.ToInt32(txt_SVol)) / Convert.ToInt32(txt_Step) + 1;
 
@@ -259,6 +260,8 @@ namespace CsharpInterface
             //for (int i = 0; i < numberSample; i++)
             int temp1 = (numberSample / repeatCount * (repeatCount - 2)) + (numberSample / (2 * repeatCount)) - 1;
             //int temp2 = (numberSample / repeatCount * (repeatCount - 1)) + (numberSample / (2 * repeatCount)) - 1;
+            //int temp1 = (numberSample / repeatCount * (repeatCount - 2)) + (numberSample / 2);
+            //for (int i = 0; i < numberSample; i++)
             for (int i = numberSample / repeatCount * (repeatCount - 2); i < numberSample / repeatCount * (repeatCount - 1); i++)
             {
                 if (i <= temp1)
@@ -266,7 +269,7 @@ namespace CsharpInterface
                     bufferV[i] = bufferV[i] - (numberSample / repeatCount * (repeatCount - 2));
                     list.Add(bufferV[i], bufferC[i]);
                 }
-                if (i > temp1) 
+                if (i > temp1)
                 {
                     bufferV[i] = (numberSample / repeatCount * (repeatCount - 1)) - bufferV[i];
                     list.Add(bufferV[i], bufferC[i]);
@@ -406,9 +409,13 @@ namespace CsharpInterface
         private
             void btConnect_Click(object sender, EventArgs e)
         {
+            //string str = "-200|800|2|55";
+
             if (serialPort1.IsOpen)
             {
                 serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
+                //serialPort1.WriteLine(str);
+                //serialPort1.WriteLine(str);
                 serialPort1.Close();
                 btConnect.Text = "Kết nối";
                 btExit.Enabled = true;
@@ -424,7 +431,9 @@ namespace CsharpInterface
                 try
                 {
                     serialPort1.Open();
+                    //serialPort1.WriteLine(str);
                     btConnect.Text = "Ngắt kết nối";
+                    //serialPort1.WriteLine(str);
                     progressBar1.Value = 100;
                     btExit.Enabled = false;
                 }
@@ -527,5 +536,9 @@ namespace CsharpInterface
 
         }
 
+        private void txt_SVol_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
