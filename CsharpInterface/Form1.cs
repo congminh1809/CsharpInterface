@@ -82,7 +82,8 @@ namespace CsharpInterface
             {
                 progressBar1.Value = 100;
 
-                progressBarMeasure.Value = (recieverCount) / ((numberSample + 50) / 100);
+                progressBarMeasure.Value = (recieverCount) / (numberSample / 99);
+
                 if (progressBarMeasure.Value > 100)
                 {
                     progressBarMeasure.Value = 100;
@@ -409,13 +410,13 @@ namespace CsharpInterface
         private
             void btConnect_Click(object sender, EventArgs e)
         {
-            //string str = "-200|800|2|55";
+            string str = txt_SVol.Text + '|' + txt_EVol.Text + '_' + txt_Step.Text;
 
             if (serialPort1.IsOpen)
             {
                 serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
                 //serialPort1.WriteLine(str);
-                //serialPort1.WriteLine(str);
+                serialPort1.WriteLine(str);
                 serialPort1.Close();
                 btConnect.Text = "Kết nối";
                 btExit.Enabled = true;
@@ -425,15 +426,16 @@ namespace CsharpInterface
             {
                 serialPort1.PortName = comboBox1.Text; // Lấy cổng COM
                 serialPort1.BaudRate = 9600; // Baudrate là 9600, trùng với baudrate của Arduino
-                numberSample = numberSample * repeatCount;
+                repeatCount = Convert.ToInt32(txt_Repeat.Text);
+                numberSample = (Convert.ToInt32(txt_EVol.Text) - Convert.ToInt32(txt_SVol.Text)) / Convert.ToInt32(txt_Step.Text) * repeatCount;
                 //serialPort1.Write("2"); //Gửi ký tự "2" qua Serial, tương ứng với state = 2
                 //serialPort1.Write("1"); //Gửi ký tự "2" qua Serial, tương ứng với state = 1
                 try
                 {
                     serialPort1.Open();
-                    //serialPort1.WriteLine(str);
+                    serialPort1.WriteLine(str);
                     btConnect.Text = "Ngắt kết nối";
-                    //serialPort1.WriteLine(str);
+                    serialPort1.WriteLine(str);
                     progressBar1.Value = 100;
                     btExit.Enabled = false;
                 }
@@ -537,6 +539,21 @@ namespace CsharpInterface
         }
 
         private void txt_SVol_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_EVol_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_Repeat_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_Step_TextChanged(object sender, EventArgs e)
         {
 
         }

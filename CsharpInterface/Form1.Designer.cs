@@ -36,7 +36,6 @@ namespace CsharpInterface
             this.btConnect = new System.Windows.Forms.Button();
             this.btExit = new System.Windows.Forms.Button();
             this.btSave = new System.Windows.Forms.Button();
-            this.btRun = new System.Windows.Forms.Button();
             this.btPause = new System.Windows.Forms.Button();
             this.btClear = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
@@ -47,6 +46,15 @@ namespace CsharpInterface
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btCheck = new System.Windows.Forms.Button();
             this.progressBarMeasure = new System.Windows.Forms.ProgressBar();
+            this.txt_SVol = new System.Windows.Forms.TextBox();
+            this.txt_EVol = new System.Windows.Forms.TextBox();
+            this.txt_Repeat = new System.Windows.Forms.TextBox();
+            this.btRun = new System.Windows.Forms.Button();
+            this.txt_Step = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // zedGraphControl1
@@ -69,7 +77,7 @@ namespace CsharpInterface
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(12, 25);
+            this.comboBox1.Location = new System.Drawing.Point(12, 5);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(120, 24);
@@ -77,7 +85,7 @@ namespace CsharpInterface
             // 
             // btConnect
             // 
-            this.btConnect.Location = new System.Drawing.Point(195, 2);
+            this.btConnect.Location = new System.Drawing.Point(195, 5);
             this.btConnect.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btConnect.Name = "btConnect";
             this.btConnect.Size = new System.Drawing.Size(120, 46);
@@ -88,7 +96,7 @@ namespace CsharpInterface
             // 
             // btExit
             // 
-            this.btExit.Location = new System.Drawing.Point(371, 2);
+            this.btExit.Location = new System.Drawing.Point(371, 5);
             this.btExit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btExit.Name = "btExit";
             this.btExit.Size = new System.Drawing.Size(120, 46);
@@ -99,7 +107,7 @@ namespace CsharpInterface
             // 
             // btSave
             // 
-            this.btSave.Location = new System.Drawing.Point(195, 106);
+            this.btSave.Location = new System.Drawing.Point(195, 105);
             this.btSave.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(120, 46);
@@ -108,20 +116,9 @@ namespace CsharpInterface
             this.btSave.UseVisualStyleBackColor = true;
             this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
-            // btRun
-            // 
-            this.btRun.Location = new System.Drawing.Point(12, 65);
-            this.btRun.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btRun.Name = "btRun";
-            this.btRun.Size = new System.Drawing.Size(120, 25);
-            this.btRun.TabIndex = 6;
-            this.btRun.Text = "Check";
-            this.btRun.UseVisualStyleBackColor = true;
-            this.btRun.Click += new System.EventHandler(this.btCheck_Click);
-            // 
             // btPause
             // 
-            this.btPause.Location = new System.Drawing.Point(371, 106);
+            this.btPause.Location = new System.Drawing.Point(371, 105);
             this.btPause.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btPause.Name = "btPause";
             this.btPause.Size = new System.Drawing.Size(120, 46);
@@ -132,7 +129,7 @@ namespace CsharpInterface
             // 
             // btClear
             // 
-            this.btClear.Location = new System.Drawing.Point(371, 54);
+            this.btClear.Location = new System.Drawing.Point(371, 55);
             this.btClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btClear.Name = "btClear";
             this.btClear.Size = new System.Drawing.Size(120, 46);
@@ -160,10 +157,10 @@ namespace CsharpInterface
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 185);
+            this.listView1.Location = new System.Drawing.Point(12, 217);
             this.listView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(479, 847);
+            this.listView1.Size = new System.Drawing.Size(479, 815);
             this.listView1.TabIndex = 9;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -180,15 +177,15 @@ namespace CsharpInterface
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 106);
+            this.progressBar1.Location = new System.Drawing.Point(321, 5);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(120, 25);
+            this.progressBar1.Size = new System.Drawing.Size(44, 45);
             this.progressBar1.TabIndex = 10;
             // 
             // btCheck
             // 
-            this.btCheck.Location = new System.Drawing.Point(195, 53);
+            this.btCheck.Location = new System.Drawing.Point(195, 55);
             this.btCheck.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btCheck.Name = "btCheck";
             this.btCheck.Size = new System.Drawing.Size(120, 47);
@@ -199,18 +196,113 @@ namespace CsharpInterface
             // 
             // progressBarMeasure
             // 
-            this.progressBarMeasure.Location = new System.Drawing.Point(12, 158);
+            this.progressBarMeasure.Location = new System.Drawing.Point(12, 190);
             this.progressBarMeasure.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.progressBarMeasure.Name = "progressBarMeasure";
             this.progressBarMeasure.Size = new System.Drawing.Size(479, 23);
             this.progressBarMeasure.Step = 1;
             this.progressBarMeasure.TabIndex = 12;
             // 
+            // txt_SVol
+            // 
+            this.txt_SVol.Location = new System.Drawing.Point(68, 75);
+            this.txt_SVol.Name = "txt_SVol";
+            this.txt_SVol.Size = new System.Drawing.Size(120, 22);
+            this.txt_SVol.TabIndex = 13;
+            this.txt_SVol.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txt_SVol.Click += new System.EventHandler(this.txt_SVol_TextChanged);
+            this.txt_SVol.TextChanged += new System.EventHandler(this.txt_SVol_TextChanged);
+            // 
+            // txt_EVol
+            // 
+            this.txt_EVol.Location = new System.Drawing.Point(68, 100);
+            this.txt_EVol.Name = "txt_EVol";
+            this.txt_EVol.Size = new System.Drawing.Size(120, 22);
+            this.txt_EVol.TabIndex = 14;
+            this.txt_EVol.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txt_EVol.Click += new System.EventHandler(this.txt_EVol_TextChanged);
+            this.txt_EVol.TextChanged += new System.EventHandler(this.txt_EVol_TextChanged);
+            // 
+            // txt_Repeat
+            // 
+            this.txt_Repeat.Location = new System.Drawing.Point(68, 150);
+            this.txt_Repeat.Name = "txt_Repeat";
+            this.txt_Repeat.Size = new System.Drawing.Size(120, 22);
+            this.txt_Repeat.TabIndex = 14;
+            this.txt_Repeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txt_Repeat.Click += new System.EventHandler(this.txt_Repeat_TextChanged);
+            this.txt_Repeat.TextChanged += new System.EventHandler(this.txt_Repeat_TextChanged);
+            // 
+            // btRun
+            // 
+            this.btRun.Location = new System.Drawing.Point(12, 33);
+            this.btRun.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btRun.Name = "btRun";
+            this.btRun.Size = new System.Drawing.Size(120, 25);
+            this.btRun.TabIndex = 6;
+            this.btRun.Text = "Check";
+            this.btRun.UseVisualStyleBackColor = true;
+            this.btRun.Click += new System.EventHandler(this.btCheck_Click);
+            // 
+            // txt_Step
+            // 
+            this.txt_Step.Location = new System.Drawing.Point(68, 125);
+            this.txt_Step.Name = "txt_Step";
+            this.txt_Step.Size = new System.Drawing.Size(120, 22);
+            this.txt_Step.TabIndex = 15;
+            this.txt_Step.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txt_Step.Click += new System.EventHandler(this.txt_Step_TextChanged);
+            this.txt_Step.TextChanged += new System.EventHandler(this.txt_Step_TextChanged);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 75);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(50, 22);
+            this.textBox1.TabIndex = 16;
+            this.textBox1.Text = "SVol";
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(12, 150);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(50, 22);
+            this.textBox4.TabIndex = 17;
+            this.textBox4.Text = "Times";
+            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(12, 125);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(50, 22);
+            this.textBox3.TabIndex = 18;
+            this.textBox3.Text = "Step";
+            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(12, 100);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(50, 22);
+            this.textBox2.TabIndex = 19;
+            this.textBox2.Text = "EVol";
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 1055);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txt_Step);
+            this.Controls.Add(this.txt_Repeat);
+            this.Controls.Add(this.txt_EVol);
+            this.Controls.Add(this.txt_SVol);
             this.Controls.Add(this.progressBarMeasure);
             this.Controls.Add(this.btCheck);
             this.Controls.Add(this.progressBar1);
@@ -229,6 +321,7 @@ namespace CsharpInterface
     "sting";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -244,7 +337,6 @@ namespace CsharpInterface
         private System.Windows.Forms.Button btConnect;
         private System.Windows.Forms.Button btExit;
         private System.Windows.Forms.Button btSave;
-        private System.Windows.Forms.Button btRun;
         private System.Windows.Forms.Button btPause;
         private System.Windows.Forms.Button btClear;
         private System.IO.Ports.SerialPort serialPort1;
@@ -255,5 +347,14 @@ namespace CsharpInterface
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btCheck;
         private System.Windows.Forms.ProgressBar progressBarMeasure;
+        private System.Windows.Forms.TextBox txt_SVol;
+        private System.Windows.Forms.TextBox txt_EVol;
+        private System.Windows.Forms.TextBox txt_Repeat;
+        private System.Windows.Forms.Button btRun;
+        private System.Windows.Forms.TextBox txt_Step;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
